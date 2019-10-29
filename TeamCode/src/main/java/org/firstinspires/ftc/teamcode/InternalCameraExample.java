@@ -24,6 +24,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
@@ -50,7 +51,7 @@ public class InternalCameraExample extends LinearOpMode
          * single-parameter constructor instead (commented out below)
          */
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        phoneCam = new OpenCvInternalCamera(OpenCvInternalCamera.CameraDirection.FRONT, cameraMonitorViewId);
+        phoneCam = new OpenCvInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
 //        phoneCam = new OpenCvInternalCamera(OpenCvInternalCamera.CameraDirection.BACK);
 
         // OR...  Do Not Activate the Camera Monitor View
@@ -66,7 +67,8 @@ public class InternalCameraExample extends LinearOpMode
          * of a frame from the camera. Note that switching pipelines on-the-fly
          * (while a streaming session is in flight) *IS* supported.
          */
-        phoneCam.setPipeline(new SamplePipeline());
+        SamplePipeline pipeline = new SamplePipeline();
+        phoneCam.setPipeline(pipeline);
 
         /*
          * Tell the camera to start streaming images to us! Note that you must make sure
@@ -97,6 +99,9 @@ public class InternalCameraExample extends LinearOpMode
             telemetry.addData("Pipeline time ms", phoneCam.getPipelineTimeMs());
             telemetry.addData("Overhead time ms", phoneCam.getOverheadTimeMs());
             telemetry.addData("Theoretical max FPS", phoneCam.getCurrentPipelineMaxFps());
+            telemetry.addData("Red", pipeline.getMean().val[0]);
+            telemetry.addData("Green", pipeline.getMean().val[1]);
+            telemetry.addData("Blue", pipeline.getMean().val[2]);
             telemetry.update();
 
             /*
@@ -185,6 +190,8 @@ public class InternalCameraExample extends LinearOpMode
          * constantly allocating and freeing large chunks of memory.
          */
 
+        Scalar mean = new Scalar(0,0,0);
+
         @Override
         public Mat processFrame(Mat input)
         {
@@ -199,6 +206,8 @@ public class InternalCameraExample extends LinearOpMode
             /*
              * Draw a simple box around the middle 1/2 of the entire frame
              */
+            
+            mean = Core.mean(input);
             Imgproc.rectangle(
                     input,
                     new Point(
@@ -207,8 +216,7 @@ public class InternalCameraExample extends LinearOpMode
                     new Point(
                             input.cols()*(3f/4f),
                             input.rows()*(3f/4f)),
-                    new Scalar(255, 146, 87), 4);
-
+                    mean , 4);
             /**
              * NOTE: to see how to get data from your pipeline to your OpMode as well as how
              * to change which stage of the pipeline is rendered to the viewport when it is
@@ -216,6 +224,10 @@ public class InternalCameraExample extends LinearOpMode
              */
 
             return input;
+        }
+
+        public Scalar getMean(){
+            return mean;
         }
     }
 }
