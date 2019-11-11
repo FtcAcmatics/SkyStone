@@ -43,14 +43,6 @@ public class InternalCameraExample extends LinearOpMode
     @Override
     public void runOpMode()
     {
-        /*
-         * Instantiate an OpenCvCamera object for the camera we'll be using.
-         * In this sample, we're using the phone's internal camera. We pass it a
-         * CameraDirection enum indicating whether to use the front or back facing
-         * camera, as well as the view that we wish to use for camera monitor (on
-         * the RC phone). If no camera monitor is desired, use the alternate
-         * single-parameter constructor instead (commented out below)
-         */
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         phoneCam = new OpenCvInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
 //        phoneCam = new OpenCvInternalCamera(OpenCvInternalCamera.CameraDirection.BACK);
@@ -68,7 +60,7 @@ public class InternalCameraExample extends LinearOpMode
          * of a frame from the camera. Note that switching pipelines on-the-fly
          * (while a streaming session is in flight) *IS* supported.
          */
-        SamplePipeline pipeline = new SamplePipeline();
+        Pipeline pipeline = new Pipeline();
         phoneCam.setPipeline(pipeline);
 
         /*
@@ -163,84 +155,6 @@ public class InternalCameraExample extends LinearOpMode
              */
             sleep(100);
         }
-    }
-
-    /*
-     * An example image processing pipeline to be run upon receipt of each frame from the camera.
-     * Note that the processFrame() method is called serially from the frame worker thread -
-     * that is, a new camera frame will not come in while you're still processing a previous one.
-     * In other words, the processFrame() method will never be called multiple times simultaneously.
-     *
-     * However, the rendering of your processed image to the viewport is done in parallel to the
-     * frame worker thread. That is, the amount of time it takes to render the image to the
-     * viewport does NOT impact the amount of frames per second that your pipeline can process.
-     *
-     * IMPORTANT NOTE: this pipeline is NOT invoked on your OpMode thread. It is invoked on the
-     * frame worker thread. This should not be a problem in the vast majority of cases. However,
-     * if you're doing something weird where you do need it synchronized with your OpMode thread,
-     * then you will need to account for that accordingly.
-     */
-    class SamplePipeline extends OpenCvPipeline
-    {
-        /*
-         * NOTE: if you wish to use additional Mat objects in your processing pipeline, it is
-         * highly recommended to declare them here as instance variables and re-use them for
-         * each invocation of processFrame(), rather than declaring them as new local variables
-         * each time through processFrame(). This removes the danger of causing a memory leak
-         * by forgetting to call mat.release(), and it also reduces memory pressure by not
-         * constantly allocating and freeing large chunks of memory.
-         */
-
-        Scalar mean = new Scalar(0,0,0);
-
-        @Override
-        public Mat processFrame(Mat input)
-        {
-
-            Point point1 = new Point(
-                            input.cols()/4,
-                            input.rows()/4);
-            Point point2 = new Point(
-                    input.cols()*(3f/4f),
-                    input.rows()*(3f/4f));
-            Rect2d rect = new Rect2d(point1, point2);
-
-            Mat interest = input.submat((int)rect.x, (int)(rect.x+rect.width), (int)rect.y, (int)(rect.y+rect.height));
-            mean = Core.mean(interest);
-            Scalar black = new Scalar(0,0,0);
-            Scalar yellow = new Scalar(252, 223, 3);
-
-            double distToBlack = Math.abs(mean.val[0] - black.val[0]) +
-                    Math.abs(mean.val[1] - black.val[1]) + Math.abs(mean.val[2] - black.val[2]);
-
-            double distToYellow = Math.abs(mean.val[0] - yellow.val[0]) +
-                    Math.abs(mean.val[1] - yellow.val[1]) + Math.abs(mean.val[2] - yellow.val[2]);
-
-            Scalar color;
-
-            if (distToBlack < distToYellow){
-                color = black;
-            }
-            else {
-                color = yellow;
-            }
-
-            Imgproc.rectangle(
-                    input,
-                    point1,
-                    point2,
-                    color , 4);
-            /**
-             * NOTE: to see how to get data from your pipeline to your OpMode as well as how
-             * to change which stage of the pipeline is rendered to the viewport when it is
-             * tapped, please see {@link PipelineStageSwitchingExample}
-             */
-
-            return input;
-        }
-
-        public Scalar getMean(){
-            return mean;
-        }
+        telemetry.addData("isYellow", pipeline.isYellow());
     }
 }
