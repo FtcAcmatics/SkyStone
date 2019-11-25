@@ -92,12 +92,12 @@ public class auto extends OpMode {
 
         double angleOutput = angleControl.run(angle);
 
-       // posControl.setSetpoint(posProfile.calcPosition(time));
+        posControl.setSetpoint(posProfile.calcPosition(time));
 
         double posOutput = posControl.run(avePos);
 
 
-        simpleDrive(posOutput, angleOutput);
+//        simpleDrive(posOutput, angleOutput);
     }
 
     public double calculateRightOutput(double vel, double angle){
