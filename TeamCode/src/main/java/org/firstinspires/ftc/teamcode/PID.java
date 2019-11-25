@@ -5,7 +5,7 @@ public class PID {
     double kd;
     double setpoint;
     double psensor;
-
+    double error;
     public PID(double p, double d){
         kp=p;
         kd=d;
@@ -16,7 +16,7 @@ public class PID {
     }
 
     public double run(double sensorValue){
-        double error=setpoint-sensorValue;
+        error=setpoint-sensorValue;
         double output;
         if(!Double.isNaN(psensor)){
             double vel = (sensorValue-psensor)/.005;
@@ -26,5 +26,8 @@ public class PID {
         }
         psensor=sensorValue;
         return output;
+    }
+    public double getError(){
+        return error;
     }
 }

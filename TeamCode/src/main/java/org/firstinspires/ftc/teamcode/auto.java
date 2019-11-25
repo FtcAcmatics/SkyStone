@@ -48,29 +48,27 @@ public class auto extends OpMode {
 
 //        telemetry.addData("powerRight", Right.getPower());
 //        telemetry.addData("powerLeft", Left.getPower());
-//        switch(state){
-//            case -1:
-//                startTime =time;
-//                state=0;
-//                break;
-//            case 0:
-//                Right.setPower(-0.7);
-//                Left.setPower(0.7);
-//                if (time-startTime>2){
-//                    state=1;
-//                }
-//                break;
-//            case 1:
-//                Right.setPower(e*.183);
-//                Left.setPower(e*.183);
-//                if (time-startTime>(e+1)/2){
-//                    state=2;
-//                }
-//                break;
-//            case 2:
-//                Right.setPower(0);
-//                Left.setPower(0);
-//        }
+        switch(state){
+            case -1:
+                startTime =time;
+                state=0;
+                break;
+            case 0:
+                posControl.setSetpoint(5);
+                if (posControl.getError()<0.1){
+                    state=1;
+                }
+                break;
+            case 1:
+                angleControl.setSetpoint(90);
+                if (posControl.getError()<0.1){
+                    state=2;
+                }
+                break;
+            case 2:
+                Right.setPower(0);
+                Left.setPower(0);
+        }
 
         double rightPos = ticksToDistance *Right.getCurrentPosition();
         double leftPos = ticksToDistance * -Left.getCurrentPosition();
@@ -99,16 +97,7 @@ public class auto extends OpMode {
         double posOutput = posControl.run(avePos);
 
 
-        simpleDrive(posOutput, angleOutput);
-
-        // eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-        // eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-        // eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-        // eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-        // eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-        // eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-        // eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-        // eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+//        simpleDrive(posOutput, angleOutput);
     }
 
     public double calculateRightOutput(double vel, double angle){
@@ -119,7 +108,7 @@ public class auto extends OpMode {
     }
 
     public void simpleDrive(double vel, double angle){
-        Right.setPower(-calculateRightOutput(vel, angle));
-        Left.setPower(calculateLeftOutput(vel, angle));
+        Right.setPower(calculateRightOutput(vel, angle));
+        Left.setPower(-calculateLeftOutput(vel, angle));
     }
 }
