@@ -4,7 +4,9 @@ public class ActionList {
     Action root = null;
     Action current = null;
     Action last = null;
+
     private boolean ranStart = false;
+
     public ActionList (Action root){
         this.root = root;
         current = root;
@@ -32,7 +34,6 @@ public class ActionList {
             current = current.next;
             ranStart = false;
         }
-
-
     }
 }
+//e
