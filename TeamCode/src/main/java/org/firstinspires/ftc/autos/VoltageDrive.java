@@ -13,6 +13,9 @@ public class VoltageDrive extends Action {
 
     OpMode opMode;
 
+    double voltageRight = .5;
+    double voltageLeft = .5;
+
     public VoltageDrive(OpMode mode, double time){
         this.opMode = mode;
         this.time = time;
@@ -26,10 +29,16 @@ public class VoltageDrive extends Action {
         startTime = opMode.time;
     }
 
+    public void setVoltage(double voltageLeft, double voltageRight){
+        this.voltageRight = voltageRight;
+        this.voltageLeft = voltageLeft;
+    }
+
     @Override
     public void update() {
-        drive.set(0.5, 0.5);
+        drive.set(voltageLeft, voltageRight);
     }
+
 
     @Override
     public boolean isFinished() {

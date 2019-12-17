@@ -9,7 +9,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class eOperator extends OpMode {
     DcMotor Right;
     DcMotor Left;
-
+    DcMotor Right2;
+    DcMotor Left2;
     Servo RightGripper;
     Servo LeftGripper;
     Servo Hook1;
@@ -21,46 +22,52 @@ public class eOperator extends OpMode {
     @Override
     public void init() {
         Right = hardwareMap.dcMotor.get("eRight");
-        Left= hardwareMap.dcMotor.get("eLeft");
+        Left = hardwareMap.dcMotor.get("eLeft");
+        Right2 = hardwareMap.dcMotor.get("eright");
+        Left2 = hardwareMap.dcMotor.get("eleft");
+
         RightGripper = hardwareMap.servo.get("rightGrip");
         LeftGripper = hardwareMap.servo.get("leftGrip");
-        Ee = hardwareMap.dcMotor.get("Ee");//ee's are pulleys and rollers ???
+        Ee = hardwareMap.dcMotor.get("Ee");//ee's are pulleys and rollers
         eE = hardwareMap.dcMotor.get("eE");
         Hook1 = hardwareMap.servo.get("Hook1");
         Hook2 = hardwareMap.servo.get("Hook2");
     }
     @Override
     public void loop() {
-        double LeftOutput =-gamepad1.left_stick_y;
-        double RightOutput = gamepad1.right_stick_y;
-        Left.setPower(LeftOutput);
-        Right.setPower(RightOutput);
-        Hook1.setPosition(190); //right
-        Hook2.setPosition(-190); //left
+        Right.setPower(gamepad1.right_stick_y-gamepad1.right_stick_x);
+        Right2.setPower(gamepad1.right_stick_y+gamepad1.right_stick_x);
+
+        Left.setPower(gamepad1.right_stick_y+gamepad1.right_stick_x);
+        Left2.setPower(gamepad1.right_stick_y-gamepad1.right_stick_x);
+
         if (gamepad1.x) {
-            Ee.setPower(1);
+            Ee.setPower(-1);
             eE.setPower(1);
-        }
-        else {
+        }else if (gamepad1.y){
+            Ee.setPower(1);
+            eE.setPower(-1);
+        } else {
             Ee.setPower(0);
             eE.setPower(0);
         }
+//        if (gamepad1.right_stick_x)
         if(gamepad1.a){
-            RightGripper.setPosition(0.5);
-            LeftGripper.setPosition(0.5);
+            RightGripper.setPosition(0);
+            LeftGripper.setPosition(1);
         }
 
         if(gamepad1.b) {
             RightGripper.setPosition(1);
-            LeftGripper.setPosition(1);
+            LeftGripper.setPosition(0);
         }
         if (gamepad1.right_bumper){
-            Hook1.setPosition(190);
-            Hook2.setPosition(-190);
+            Hook1.setPosition(0);
+            Hook2.setPosition(1);
         }
         if (gamepad1.left_bumper){
-            Hook2.setPosition(-90);
-            Hook1.setPosition(90);
+            Hook2.setPosition(0);
+            Hook1.setPosition(1);
         }
 
         telemetry.addData("leftPos", LeftGripper.getPosition());
