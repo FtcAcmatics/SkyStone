@@ -18,17 +18,15 @@ public class Drive {
 
     DcMotor Right1, Left1, Right2, Left2 ;
 
-    private Drive(HardwareMap hardwareMap) {
+    public Drive(HardwareMap hardwareMap) {
         Right1 = hardwareMap.dcMotor.get("eRight");
         Left1 = hardwareMap.dcMotor.get("eLeft");
-        Right2 = hardwareMap.dcMotor.get("ERight");
-        Left2 = hardwareMap.dcMotor.get("Eleft");
+
     }
-    public void set(double left, double right, double eleft, double eright){
+    public void set(double left, double right){
         Left1.setPower(-left);
         Right1.setPower(right);
-        Left2.setPower(-eleft);
-        Right2.setPower(eright);
+
     }
 
     public double getRightPos(){

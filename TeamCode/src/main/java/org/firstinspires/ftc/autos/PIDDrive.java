@@ -9,7 +9,7 @@ public class PIDDrive extends Action{
     Drive BillE;
     PID badGuyIsNotE;
     OpMode opMode;
-    float e = 2.718171817;
+    double e = 2.718171817;
 
     public PIDDrive(OpMode mode, double setpoint){
         opMode = mode;

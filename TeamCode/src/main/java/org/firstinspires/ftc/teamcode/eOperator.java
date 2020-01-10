@@ -9,8 +9,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class eOperator extends OpMode {
     DcMotor Right;
     DcMotor Left;
-    DcMotor Right2;
-    DcMotor Left2;
     Servo RightGripper;
     Servo LeftGripper;
     Servo Hook1;
@@ -23,8 +21,6 @@ public class eOperator extends OpMode {
     public void init() {
         Right = hardwareMap.dcMotor.get("eRight");
         Left = hardwareMap.dcMotor.get("eLeft");
-        Right2 = hardwareMap.dcMotor.get("eright");
-        Left2 = hardwareMap.dcMotor.get("eleft");
 
         RightGripper = hardwareMap.servo.get("rightGrip");
         LeftGripper = hardwareMap.servo.get("leftGrip");
@@ -35,11 +31,8 @@ public class eOperator extends OpMode {
     }
     @Override
     public void loop() {
-        Right.setPower(gamepad1.right_stick_y-gamepad1.right_stick_x);
-        Right2.setPower(gamepad1.right_stick_y+gamepad1.right_stick_x);
-
-        Left.setPower(gamepad1.right_stick_y+gamepad1.right_stick_x);
-        Left2.setPower(gamepad1.right_stick_y-gamepad1.right_stick_x);
+        Right.setPower(-gamepad1.right_stick_y);
+        Left.setPower(gamepad1.right_stick_y);
 
         if (gamepad1.x) {
             Ee.setPower(-1);
