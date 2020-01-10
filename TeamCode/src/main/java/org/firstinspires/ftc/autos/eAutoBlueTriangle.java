@@ -5,8 +5,10 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@Autonomous(name="eAuto")
-public class eAuto extends OpMode {
+@Autonomous (name="eAutoBlueTriangle")
+
+public class eAutoBlueTriangle extends OpMode {
+
     DcMotor Right;
     DcMotor Left;
     Servo RightGripper;
@@ -32,7 +34,26 @@ public class eAuto extends OpMode {
 
     @Override
     public void loop() {
-
-
+        /*switch(state){
+            case -1:
+                startTime =time;
+                state=0;
+                break;
+            case 0:
+                posControl.setSetpoint(5);
+                if (posControl.getError()<0.1){
+                    state=1;
+                }
+                break;
+            case 1:
+                angleControl.setSetpoint(90);
+                if (posControl.getError()<0.1){
+                    state=2;
+                }
+                break;
+            case 2:
+                Right.setPower(0);
+                Left.setPower(0);
+        }*/
     }
 }
