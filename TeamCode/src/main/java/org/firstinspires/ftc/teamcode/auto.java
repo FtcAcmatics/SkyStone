@@ -66,8 +66,8 @@ public class auto extends OpMode {
                 }
                 break;
             case 2:
-                Right.setPower(0);
-                Left.setPower(0);
+                Right.setPower(-1);
+                Left.setPower(1);
         }
 
         double rightPos = ticksToDistance *Right.getCurrentPosition();
@@ -111,4 +111,6 @@ public class auto extends OpMode {
         Right.setPower(calculateRightOutput(vel, angle));
         Left.setPower(-calculateLeftOutput(vel, angle));
     }
+
+
 }
