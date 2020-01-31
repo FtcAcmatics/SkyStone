@@ -32,7 +32,7 @@ public class eOperator extends OpMode {
     @Override
     public void loop() {
         Right.setPower(-gamepad1.right_stick_y);
-        Left.setPower(gamepad1.right_stick_y);
+        Left.setPower(gamepad1.left_stick_y);
 
         if (gamepad1.x) {
             Ee.setPower(-1);
@@ -63,9 +63,7 @@ public class eOperator extends OpMode {
             Hook1.setPosition(1);
         }
 
-        telemetry.addData("leftPos", LeftGripper.getPosition());
-        telemetry.addData("rightPos", RightGripper.getPosition());
-
+        telemetry.addData("leftPos", Left.getCurrentPosition());
     }
 
 }
