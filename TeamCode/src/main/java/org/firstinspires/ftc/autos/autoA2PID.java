@@ -27,7 +27,7 @@ public class autoA2PID extends OpMode {
     double lVel; //left velocity
     double rt; //position at past time on the right
     double lt; //position at past time on the left
-    double SP = 1/(4 * 3.1415926); //the 10 is the distance in inches
+    double SP = 1;//1/(4 * 3.1415926); //the 10 is the distance in inches
     @Override
     public void init() {
         Right = hardwareMap.dcMotor.get("eRight");
