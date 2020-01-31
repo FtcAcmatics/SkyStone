@@ -17,6 +17,7 @@ public class eOperator extends OpMode {
     DcMotor Ee;
     DcMotor eE;
 
+
     @Override
     public void init() {
         Right = hardwareMap.dcMotor.get("eRight");
@@ -33,6 +34,7 @@ public class eOperator extends OpMode {
     public void loop() {
         Right.setPower(-gamepad1.right_stick_y);
         Left.setPower(gamepad1.left_stick_y);
+
 
         if (gamepad1.x) {
             Ee.setPower(-1);

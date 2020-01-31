@@ -16,7 +16,7 @@ public class AutoA3 extends OpMode {
 
     @Override
     public void loop() {
-        RightGripper.setPosition(0.5);
-        LeftGripper.setPosition(0.5);
+        RightGripper.setPosition(1);
+        LeftGripper.setPosition(0);
     }
 }
